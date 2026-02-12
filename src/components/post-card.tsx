@@ -55,12 +55,8 @@ export default function PostCard({ post }: PostCardProps) {
           />
         ) : (
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${getGradient(post.title)} flex items-center justify-center`}
-          >
-            <span className="text-4xl font-bold text-foreground/10">
-              {post.title.charAt(0).toUpperCase()}
-            </span>
-          </div>
+            className={`absolute inset-0 bg-gradient-to-br ${getGradient(post.title)}`}
+          />
         )}
         {post.category && (
           <div className="absolute top-4 left-4 z-20">
