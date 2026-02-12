@@ -1,8 +1,11 @@
-import { fetchPublishedPosts, getPostFromNotion } from '../src/lib/notion';
-import fs from 'fs';
-import path from 'path';
+import { config } from 'dotenv';
+config({ path: '.env.local' });
 
 async function cachePosts() {
+  const { fetchPublishedPosts, getPostFromNotion } = await import('../src/lib/notion');
+  const fs = await import('fs');
+  const path = await import('path');
+
   try {
     console.log('Fetching posts from Notion...');
     const posts = await fetchPublishedPosts();
