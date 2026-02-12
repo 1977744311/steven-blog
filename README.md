@@ -1,138 +1,103 @@
-# Notion-Powered Next.js Blog Template
+# Steven Blog
 
-A modern, fast, and customizable blog template powered by Notion as a CMS and Next.js. This template allows you to use Notion as your content management system while serving your blog with Next.js.
+A modern blog built with Next.js and Notion as CMS. Forked from [thegesturs/notion-blogs](https://github.com/thegesturs/notion-blogs) with enhanced UI and features.
 
-## Features
+## What's New
 
-- 🚀 Built with Next.js 14+ and App Router
-- 📝 Use Notion as a CMS
-- 🎨 Beautiful and responsive design
-- ⚡ Fast page loads with static generation
-- 🔍 SEO optimized
-- 📱 Mobile-friendly
-- 🌙 Dark mode support
-- ✨ Syntax highlighting for code blocks
-- 📊 Table support
-- 🖼️ Image optimization
-- 📅 Reading time and word count
+- **Pagination** — Homepage displays 6 posts per page with URL-based navigation (`/?page=2`)
+- **Search** — `Cmd+K` / `Ctrl+K` to open a search dialog, filter posts by title, description, tags, and category
+- **Sticky Navbar** — Frosted glass effect header with search button and dark mode toggle
+- **Improved Cards** — Gradient placeholder for posts without cover images, consistent card heights
+- **Enhanced Footer** — Blog info section with back-to-top button
+- **Deploy Button** — One-click Vercel deploy trigger with secret authentication
 
-## Prerequisites
+## Tech Stack
 
-- Node.js 18.17.1 or later
-- A Notion account
-- Basic knowledge of Next.js and React
+- **Framework**: Next.js 15 (App Router)
+- **CMS**: Notion
+- **Styling**: Tailwind CSS v4 + shadcn/ui
+- **Theming**: next-themes (light/dark)
 
 ## Getting Started
 
-### 1. Clone the Template
+### Prerequisites
 
-1. Visit this Notion template: [Blog Template](https://exclusive-gatsby-850.notion.site/20a186dad999800dbb94f239f907215d?v=20a186dad99980228480000c8707478c&source=github)
-2. Click "Duplicate" to clone it to your workspace
-3. Clone this repository to your local machine
+- Node.js 18.17+
+- pnpm
+- A Notion account
 
-### 2. Set Up Notion Integration
-
-1. Go to [Notion Developers](https://www.notion.so/my-integrations)
-2. Click "New integration"
-3. Fill in the integration details:
-   - Name: Choose a name for your integration
-   - Select the workspace where you cloned the blog template
-   - Choose "Internal integration"
-4. Under "Capabilities", select only "Read content" (uncheck Insert content and Update content)
-5. Copy the "Internal Integration Token" (this will be your `NOTION_TOKEN`)
-
-### 3. Connect Integration to Your Database
-
-1. Go to your cloned Notion blog page
-2. Click the "•••" (three dots) in the top right corner
-3. Go to "Connections" -> find your integration and click "Connect"
-
-### 4. Get Your Database ID
-
-1. Open your Notion database in the browser
-2. Copy the ID from the URL. For example:
-   ```
-   https://www.notion.so/20bf471a8ac78080a3d4dad6ed77ca17?v=...
-                        └───────── Database ID ─────────┘
-   ```
-
-### 5. Environment Setup
-
-1. Create a `.env.local` file in your project root:
-   ```env
-   NOTION_TOKEN=your_integration_token_here
-   NOTION_DATABASE_ID=your_database_id_here
-   NEXT_PUBLIC_SITE_URL=your_site_url_here
-   ```
-
-### 6. Install and Run
+### 1. Clone & Install
 
 ```bash
-npm install
-npm run dev
+git clone git@github.com:1977744311/steven-blog.git
+cd steven-blog
+pnpm install
 ```
 
-Visit `http://localhost:3000` to see your blog.
+### 2. Set Up Notion
 
-## Customizing the Template
+1. Duplicate this [Notion template](https://exclusive-gatsby-850.notion.site/20a186dad999800dbb94f239f907215d?v=20a186dad99980228480000c8707478c&source=github) to your workspace
+2. Create a [Notion integration](https://www.notion.so/my-integrations) with "Read content" capability
+3. Connect the integration to your database page
 
-### Adding New Properties
+### 3. Environment Variables
 
-1. In your Notion database, you can add new properties by clicking "+ Add a property"
-2. To use new properties in your blog, modify `src/lib/notion.ts`:
+Create `.env.local`:
 
-```typescript
-export interface Post {
-  // ... existing properties ...
-  yourNewProperty?: string; // Add your new property
-}
-
-export async function getPost(pageId: string): Promise<Post | null> {
-  try {
-    // ... existing code ...
-    const post: Post = {
-      // ... existing properties ...
-      yourNewProperty: properties.YourNewProperty?.your_property_type?.value,
-    };
-    // ... rest of the code ...
-  }
-}
+```env
+NOTION_TOKEN=your_integration_token
+NOTION_DATABASE_ID=your_database_id
+NEXT_PUBLIC_SITE_URL=https://your-site.com
+VERCEL_DEPLOY_HOOK=your_vercel_deploy_hook_url
+DEPLOY_SECRET=your_deploy_secret
 ```
 
-### Customizing the Layout
+### 4. Run
 
-- Modify `src/app/posts/[slug]/page.tsx` to change the blog post layout
-- Update `src/components/mdx-component.tsx` to customize markdown rendering
-- Style components using Tailwind CSS classes
+```bash
+pnpm dev
+```
 
-### Managing Your Blog
-
-1. Access your integration settings anytime:
-   - Go to Notion Settings -> Connections
-   - Find your integration
-   - Click "•••" -> "Manage in developer portal"
-
-2. Create new blog posts:
-   - Add a new page to your Notion database
-   - Fill in the required properties
-   - Set status to "Published" when ready
+Visit `http://localhost:3000`.
 
 ## Database Properties
 
-The template uses these default properties:
+| Property | Type | Required |
+|---|---|---|
+| Title | Title | Yes |
+| Status | Status (Published/Draft) | Yes |
+| Published Date | Date | Yes |
+| Author | People | No |
+| Tags | Multi-select | No |
+| Category | Select | No |
+| Featured Image | Files | No |
 
-- `Title` - The post title (required)
-- `Status` - Publication status (Published/Draft)
-- `Published Date` - Post publication date
-- `Author` - Post author
-- `Tags` - Post tags (multi-select)
-- `Category` - Post category (select)
-- `Featured Image` - Cover image URL
+## Project Structure
 
-## Contributing
+```
+src/
+├── app/
+│   ├── page.tsx              # Homepage with pagination
+│   ├── posts/[slug]/page.tsx # Post detail page
+│   └── api/deploy/route.ts   # Deploy API
+├── components/
+│   ├── navbar.tsx            # Sticky navbar with search
+│   ├── search-dialog.tsx     # Cmd+K search dialog
+│   ├── post-card.tsx         # Blog post card
+│   ├── post-pagination.tsx   # Pagination controls
+│   ├── layout.tsx            # Main layout
+│   └── ui/                   # shadcn/ui components
+├── lib/
+│   ├── notion.ts             # Notion API & cache
+│   └── utils.ts              # Utilities
+└── scripts/
+    └── cache-posts.ts        # Build-time post caching
+```
 
-Feel free to submit issues and enhancement requests!
+## Credits
+
+Based on [thegesturs/notion-blogs](https://github.com/thegesturs/notion-blogs).
 
 ## License
 
-MIT License - feel free to use this template for your own blog!
+MIT
